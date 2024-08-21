@@ -1,0 +1,48 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  padding: 1rem;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+form {
+  display: grid;
+  width: 100%;
+  gap: 1rem;
+  justify-content: center;
+}
+
+form > div {
+  display: grid;
+  justify-content: space-between;
+  align-items: center;
+  width: 50%;
+}
+
+textarea,
+input {
+  width: 300px;
+}
+
+form > button {
+  width: 25%;
+}
+
+li {
+  text-decoration: none;
+  list-style-type: none;
+}
+
+ul {
+  padding: 0px;
+}
+
+div.message {
+  margin-bottom: 16px;
+}
