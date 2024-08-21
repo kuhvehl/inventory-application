@@ -1,5 +1,26 @@
 const db = require("../db/queries");
 
+async function createCategory(req, res) {
+  const { name } = req.body;
+  try {
+    await db.createCategory(name);
+    res.redirect("/categories");
+  } catch (error) {
+    res.status(500).send("Error creating category");
+  }
+}
+
+async function updateCategory(req, res) {
+  const { id } = req.params;
+  const { name } = req.body;
+  try {
+    await db.updateCategory(id, name);
+    res.redirect("/categories");
+  } catch (error) {
+    res.status(500).send("Error updating category");
+  }
+}
+
 async function viewCategory(req, res) {
   try {
     const categories = await db.getAllCategories();
@@ -72,4 +93,6 @@ module.exports = {
   deleteCategory,
   viewCategory,
   viewCategoryItems,
+  createCategory,
+  updateCategory,
 };

@@ -1,5 +1,26 @@
 const db = require("../db/queries");
 
+async function createItem(req, res) {
+  const { name, price, description, subcategory_id } = req.body;
+  try {
+    await db.createItem(name, price, description, subcategory_id);
+    res.redirect(`/subcategories/${subcategory_id}`);
+  } catch (error) {
+    res.status(500).send("Error creating item");
+  }
+}
+
+async function updateItem(req, res) {
+  const { id } = req.params;
+  const { name, price, description, subcategory_id } = req.body;
+  try {
+    await db.updateItem(id, name, price, description, subcategory_id);
+    res.redirect(`/subcategories/${subcategory_id}`);
+  } catch (error) {
+    res.status(500).send("Error updating item");
+  }
+}
+
 async function viewItem(req, res) {
   const { id } = req.params;
   try {
@@ -56,4 +77,6 @@ module.exports = {
   updateItem,
   deleteItem,
   viewItem,
+  createItem,
+  updateItem,
 };

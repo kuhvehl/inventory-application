@@ -1,5 +1,26 @@
 const db = require("../db/queries");
 
+async function createSubcategory(req, res) {
+  const { name, category_id } = req.body;
+  try {
+    await db.createSubcategory(name, category_id);
+    res.redirect(`/categories/${category_id}`);
+  } catch (error) {
+    res.status(500).send("Error creating subcategory");
+  }
+}
+
+async function updateSubcategory(req, res) {
+  const { id } = req.params;
+  const { name, category_id } = req.body;
+  try {
+    await db.updateSubcategory(id, name, category_id);
+    res.redirect(`/categories/${category_id}`);
+  } catch (error) {
+    res.status(500).send("Error updating subcategory");
+  }
+}
+
 async function viewSubcategories(req, res) {
   const { id } = req.params; // Category ID
   try {
@@ -72,4 +93,6 @@ module.exports = {
   deleteSubcategory,
   viewSubcategories,
   viewSubcategoryItems,
+  createSubcategory,
+  updateSubcategory,
 };

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Update Subcategory</title>
+  </head>
+  <body>
+    <h1>Update Subcategory</h1>
+    <form action="/subcategories/update/<%= subcategory.id %>" method="POST">
+      <label for="name">Subcategory Name:</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        value="<%= subcategory.name %>"
+        required
+      />
+      <input
+        type="hidden"
+        name="category_id"
+        value="<%= subcategory.category_id %>"
+      />
+      <button type="submit">Update</button>
+    </form>
+  </body>
+</html>
