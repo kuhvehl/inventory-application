@@ -1,8 +1,11 @@
 const express = require("express");
+const app = express();
+const categoryRoutes = require("./routes/categoryRoutes");
+const subcategoryRoutes = require("./routes/subcategoryRoutes");
+const itemRoutes = require("./routes/itemRoutes");
+
 const path = require("path");
 require("dotenv").config();
-
-const app = express();
 
 // Set view engine to EJS
 app.set("view engine", "ejs");
@@ -13,7 +16,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Routes
-// Placeholder for future routes
+app.use("/categories", categoryRoutes);
+app.use("/subcategories", subcategoryRoutes);
+app.use("/items", itemRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 3000;
