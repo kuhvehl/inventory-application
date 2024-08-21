@@ -1,5 +1,15 @@
 const db = require("../db/queries");
 
+async function viewItem(req, res) {
+  const { id } = req.params;
+  try {
+    const item = await db.getItemById(id);
+    res.render("items/viewItem", { item });
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+}
+
 async function getAllItems(req, res) {
   try {
     const items = await db.getAllItems();
@@ -45,4 +55,5 @@ module.exports = {
   createItem,
   updateItem,
   deleteItem,
+  viewItem,
 };

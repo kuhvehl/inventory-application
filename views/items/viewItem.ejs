@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Items</title>
+  </head>
+  <body>
+    <h1>Items in <%= subcategoryName %></h1>
+    <ul>
+      <% items.forEach(item => { %>
+      <li>
+        <a href="/items/<%= item.id %>"><%= item.name %></a> - $<%= item.price
+        %>
+        <p><%= item.description %></p>
+      </li>
+      <% }) %>
+    </ul>
+  </body>
+</html>

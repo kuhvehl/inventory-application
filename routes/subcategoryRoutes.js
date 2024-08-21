@@ -14,4 +14,10 @@ router.put("/:id", subcategoryController.updateSubcategory);
 // Route to delete a subcategory
 router.delete("/:id", subcategoryController.deleteSubcategory);
 
+// Route to view all subcategories under a specific category
+router.get("/:id", subcategoryController.viewSubcategories);
+
+// Route to view items in a specific subcategory
+router.get("/items/:id", subcategoryController.viewSubcategoryItems);
+
 module.exports = router;

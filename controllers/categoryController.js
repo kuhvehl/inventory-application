@@ -1,5 +1,30 @@
 const db = require("../db/queries");
 
+async function viewCategory(req, res) {
+  try {
+    const categories = await db.getAllCategories();
+    res.render("categories/viewCategory", { categories });
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+}
+
+async function viewCategoryItems(req, res) {
+  const { id } = req.params;
+  try {
+    const subcategories = await db.getSubcategoriesByCategoryId(id);
+    const items = await db.getItemsBySubcategoryIds(
+      subcategories.map((sub) => sub.id)
+    );
+    res.render("items/viewItem", {
+      items,
+      subcategoryName: "Subcategory Name",
+    });
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+}
+
 async function getAllCategories(req, res) {
   try {
     const categories = await db.getAllCategories();
@@ -45,4 +70,6 @@ module.exports = {
   createCategory,
   updateCategory,
   deleteCategory,
+  viewCategory,
+  viewCategoryItems,
 };

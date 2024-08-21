@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Subcategories</title>
+  </head>
+  <body>
+    <h1>Subcategories under <%= categoryName %></h1>
+    <ul>
+      <% subcategories.forEach(subcategory => { %>
+      <li>
+        <a href="/subcategories/<%= subcategory.id %>"
+          ><%= subcategory.name %></a
+        >
+      </li>
+      <% }) %>
+    </ul>
+  </body>
+</html>

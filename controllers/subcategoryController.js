@@ -1,5 +1,19 @@
 const db = require("../db/queries");
 
+async function viewSubcategories(req, res) {
+  const { id } = req.params; // Category ID
+  try {
+    const category = await db.getCategoryById(id);
+    const subcategories = await db.getSubcategoriesByCategoryId(id);
+    res.render("subcategories/viewSubcategory", {
+      subcategories,
+      categoryName: category.name,
+    });
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+}
+
 async function getAllSubcategories(req, res) {
   try {
     const subcategories = await db.getAllSubcategories();
@@ -40,9 +54,22 @@ async function deleteSubcategory(req, res) {
   }
 }
 
+async function viewSubcategoryItems(req, res) {
+  const { id } = req.params; // Subcategory ID
+  try {
+    const subcategory = await db.getSubcategoryById(id);
+    const items = await db.getItemsBySubcategoryId(id);
+    res.render("items/viewItem", { items, subcategoryName: subcategory.name });
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+}
+
 module.exports = {
   getAllSubcategories,
   createSubcategory,
   updateSubcategory,
   deleteSubcategory,
+  viewSubcategories,
+  viewSubcategoryItems,
 };
