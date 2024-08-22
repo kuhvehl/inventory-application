@@ -1,0 +1,33 @@
+ul.menu {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  place-items: center;
+  padding-top: 15px;
+}
+
+.filter-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: start;
+  gap: 1rem;
+  padding-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+  ul.menu {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .filter-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+}
+
+.inventory-heading {
+  padding-bottom: 15px;
+}

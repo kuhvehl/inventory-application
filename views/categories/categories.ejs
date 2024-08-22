@@ -1,0 +1,39 @@
+<!-- views/categories.ejs -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Categories</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <!-- Link to your stylesheet -->
+  </head>
+  <body>
+    <header>
+      <h1>Categories</h1>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/subcategories">Subcategories</a>
+        <a href="/items">Items</a>
+        <a href="/categories/new">Add New Category</a>
+      </nav>
+    </header>
+    <main>
+      <ul>
+        <% categories.forEach(category => { %>
+        <li>
+          <a href="/categories/<%= category.id %>/items"
+            ><%= category.name %></a
+          >
+          <a href="/categories/<%= category.id %>/edit">Edit</a>
+          <form
+            action="/categories/<%= category.id %>?_method=DELETE"
+            method="POST"
+            style="display: inline"
+          >
+            <button type="submit">Delete</button>
+          </form>
+        </li>
+        <% }) %>
+      </ul>
+    </main>
+  </body>
+</html>

@@ -1,15 +1,5 @@
 const db = require("../db/queries");
 
-async function createItem(req, res) {
-  const { name, price, description, subcategory_id } = req.body;
-  try {
-    await db.createItem(name, price, description, subcategory_id);
-    res.redirect(`/subcategories/${subcategory_id}`);
-  } catch (error) {
-    res.status(500).send("Error creating item");
-  }
-}
-
 async function updateItem(req, res) {
   const { id } = req.params;
   const { name, price, description, subcategory_id } = req.body;
@@ -31,11 +21,12 @@ async function viewItem(req, res) {
   }
 }
 
-async function getAllItems(req, res) {
+async function getItems(req, res) {
   try {
-    const items = await db.getAllItems();
-    res.json(items);
+    const items = await db.getItems(); // Ensure you have this function in your db/queries.js
+    res.render("index", { items });
   } catch (error) {
+    console.error("Error fetching items:", error);
     res.status(500).send("Internal Server Error");
   }
 }
@@ -71,8 +62,18 @@ async function deleteItem(req, res) {
   }
 }
 
+async function getAllItems(req, res) {
+  try {
+    const items = await db.getItems(); // Ensure you have this function in your db/queries.js
+    res.render("index", { items });
+  } catch (error) {
+    console.error("Error fetching items:", error);
+    res.status(500).send("Internal Server Error");
+  }
+}
+
 module.exports = {
-  getAllItems,
+  getItems,
   createItem,
   updateItem,
   deleteItem,

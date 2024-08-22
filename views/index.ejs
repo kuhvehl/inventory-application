@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wine Store</title>
+    <link rel="stylesheet" href="/reset.css" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/index.css" />
+    <script src="/filters.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <header>
+      <h1>Wine Inventory App</h1>
+      <nav>
+        <ul class="menu">
+          <li><a href="/categories">Manage Categories</a></li>
+          <li><a href="/subcategories">Manage Subcategories</a></li>
+          <li><a href="/items">Manage Items</a></li>
+        </ul>
+      </nav>
+    </header>
+    <div class="filter-container">
+      <select id="category-filter" name="category">
+        <option value="">All Categories</option>
+        <% categories.forEach(category => { %>
+          <option value="<%= category.id %>" <%= category.id == selectedCategory ? 'selected' : '' %>>
+            <%= category.name %>
+          </option>
+        <% }) %>
+      </select>
+      
+      <select id="subcategory-filter" name="subcategory">
+        <option value="">All Subcategories</option>
+        <% subcategories.forEach(subcategory => { %>
+          <option value="<%= subcategory.id %>" <%= subcategory.id == selectedSubcategory ? 'selected' : '' %>>
+            <%= subcategory.name %>
+          </option>
+        <% }) %>
+      </select>
+      
+      <select id="brand-filter" name="brand">
+        <option value="">All Brands</option>
+        <% brands.forEach(brand => { %>
+          <option value="<%= brand %>" <%= brand == selectedBrand ? 'selected' : '' %>>
+            <%= brand %>
+          </option>
+        <% }) %>
+      </select>
+      
+      <select id="region-filter" name="region">
+        <option value="">All Regions</option>
+        <% regions.forEach(region => { %>
+          <option value="<%= region %>" <%= region == selectedRegion ? 'selected' : '' %>>
+            <%= region %>
+          </option>
+        <% }) %>
+      </select>
+    </div>
+    <main>
+      <section>
+        <h2 class="inventory-heading">Current Inventory:</h2>
+        <ul>
+          <% if (items.length > 0) { %> <% items.forEach(item => { %>
+          <li>
+            <strong><%= item.name %></strong><br />
+            Price: $<%= item.price.toFixed(2) %><br />
+            Description: <%= item.description %><br />
+            <a href="/items/<%= item.id %>">View Details</a>
+          </li>
+          <% }) %> <% } else { %>
+          <p>No items available.</p>
+          <% } %>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>

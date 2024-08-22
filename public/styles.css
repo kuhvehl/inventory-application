@@ -4,6 +4,9 @@ body {
   padding: 0;
   background-color: #f4f4f4;
   padding: 1rem;
+  display: grid;
+  width: 100%;
+  justify-content: center;
 }
 
 h1 {
@@ -43,6 +46,8 @@ ul {
   padding: 0px;
 }
 
-div.message {
+ul,
+div.message,
+li {
   margin-bottom: 16px;
 }

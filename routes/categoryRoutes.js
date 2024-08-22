@@ -2,6 +2,12 @@ const express = require("express");
 const router = express.Router();
 const categoryController = require("../controllers/categoryController");
 
+// Route to display all categories
+// router.get("/", categoryController.listCategories);
+
+// Route to display a specific category and its items
+router.get("/:id/items", categoryController.viewCategoryItems);
+
 // Show form to create a new category
 router.get("/create", (req, res) => res.render("categories/createCategory"));
 
@@ -17,19 +23,7 @@ router.get("/update/:id", async (req, res) => {
 // Handle form submission to update an existing category
 router.post("/update/:id", categoryController.updateCategory);
 
-// Route to view all categories
-router.get("/", categoryController.viewCategory);
-
-// Route to create a new category
-router.post("/", categoryController.createCategory);
-
-// Route to update a category
-router.put("/:id", categoryController.updateCategory);
-
 // Route to delete a category
 router.delete("/:id", categoryController.deleteCategory);
-
-// Route to view items in a specific category
-router.get("/:id", categoryController.viewCategoryItems);
 
 module.exports = router;

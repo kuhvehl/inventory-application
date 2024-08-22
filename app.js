@@ -6,6 +6,7 @@ require("dotenv").config();
 // Middleware to parse incoming requests
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Set view engine to EJS
 app.set("view engine", "ejs");
@@ -15,8 +16,10 @@ app.set("views", path.join(__dirname, "views"));
 const categoryRoutes = require("./routes/categoryRoutes");
 const subcategoryRoutes = require("./routes/subcategoryRoutes");
 const itemRoutes = require("./routes/itemRoutes");
+const indexRoutes = require("./routes/indexRoutes");
 
 // Routes
+app.use("/", indexRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/subcategories", subcategoryRoutes);
 app.use("/items", itemRoutes);

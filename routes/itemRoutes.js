@@ -26,7 +26,7 @@ router.post("/update/:id", itemController.updateItem);
 router.get("/:id", itemController.viewItem);
 
 // Route to get all items
-router.get("/", itemController.getAllItems);
+router.get("/", itemController.getItems);
 
 // Route to create a new item
 router.post("/", itemController.createItem);
