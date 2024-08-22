@@ -86,6 +86,10 @@ async function updateItem(
   );
 }
 
+async function deleteItem(id) {
+  await pool.query("DELETE FROM items WHERE id = $1", [id]);
+}
+
 // Subcategories
 
 // Categories
@@ -154,10 +158,6 @@ async function createItem(name, price, description, subcategory_id) {
   return result.rows[0];
 }
 
-async function deleteItem(id) {
-  await pool.query("DELETE FROM items WHERE id = $1", [id]);
-}
-
 module.exports = {
   getItems,
   getCategories,
@@ -166,4 +166,5 @@ module.exports = {
   getRegions,
   getItemById,
   updateItem,
+  deleteItem,
 };

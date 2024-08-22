@@ -38,5 +38,14 @@
         <a href="/">Back to Home</a>
       </section>
     </main>
+    <script>
+      document
+        .querySelector('form[action*="_method=DELETE"]')
+        .addEventListener("submit", function (event) {
+          if (!confirm("Are you sure you want to delete this item?")) {
+            event.preventDefault();
+          }
+        });
+    </script>
   </body>
 </html>

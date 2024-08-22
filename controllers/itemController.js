@@ -33,7 +33,6 @@ async function updateItem(req, res) {
     const { name, price, description, brand, region, subcategory_id } =
       req.body;
 
-    // Update the item, using the selected subcategory and other fields
     await db.updateItem(
       itemId,
       name,
@@ -50,8 +49,20 @@ async function updateItem(req, res) {
   }
 }
 
+async function deleteItem(req, res) {
+  try {
+    const { id } = req.params;
+    await db.deleteItem(id);
+    res.redirect("/");
+  } catch (err) {
+    console.error("Error deleting item:", err);
+    res.status(500).send("Server Error");
+  }
+}
+
 module.exports = {
   viewItemDetails,
   editItemForm,
   updateItem,
+  deleteItem,
 };
