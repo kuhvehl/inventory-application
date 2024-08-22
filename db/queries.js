@@ -78,12 +78,11 @@ async function updateItem(
   description,
   brand,
   region,
-  categoryId,
-  subcategoryId
+  subcategory_id
 ) {
   await pool.query(
-    "UPDATE items SET name = $1, price = $2, description = $3, brand = $4, region = $5, category_id = $6, subcategory_id = $7 WHERE id = $8",
-    [name, price, description, brand, region, categoryId, subcategoryId, id]
+    "UPDATE items SET name = $1, price = $2, description = $3, brand = $4, region = $5, subcategory_id = $6 WHERE id = $7",
+    [name, price, description, brand, region, subcategory_id, id]
   );
 }
 
