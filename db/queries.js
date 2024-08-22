@@ -1,15 +1,6 @@
 const pool = require("./pool");
 
 // Index
-
-// async function getItems() {
-//   const result = await pool.query("SELECT * FROM items");
-//   return result.rows.map((item) => ({
-//     ...item,
-//     price: parseFloat(item.price),
-//   }));
-// }
-
 async function getItems(filters = {}) {
   let query = "SELECT * FROM items";
   const params = [];
@@ -66,6 +57,18 @@ async function getBrands() {
 async function getRegions() {
   const result = await pool.query("SELECT DISTINCT region FROM items");
   return result.rows.map((row) => row.region);
+}
+
+// Items
+async function getItemById(id) {
+  const result = await pool.query("SELECT * FROM items WHERE id = $1", [id]);
+  if (result.rows.length) {
+    return {
+      ...result.rows[0],
+      price: parseFloat(result.rows[0].price),
+    };
+  }
+  return null;
 }
 
 // Subcategories
@@ -128,11 +131,6 @@ async function deleteSubcategory(id) {
 
 // Items
 
-async function getItemById(id) {
-  const result = await pool.query("SELECT * FROM items WHERE id = $1", [id]);
-  return result.rows[0];
-}
-
 async function createItem(name, price, description, subcategory_id) {
   const result = await pool.query(
     "INSERT INTO items (name, price, description, subcategory_id) VALUES ($1, $2, $3, $4) RETURNING *",
@@ -159,4 +157,5 @@ module.exports = {
   getSubcategories,
   getBrands,
   getRegions,
+  getItemById,
 };

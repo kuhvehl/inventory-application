@@ -1,0 +1,33 @@
+.edit-delete {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.edit-delete a,
+.edit-delete button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+}
+.edit-delete a {
+  background-color: #007bff;
+  color: #fff;
+  transition: background-color 0.3s;
+}
+.edit-delete a:hover {
+  background-color: #0056b3;
+}
+.edit-delete button {
+  background-color: #dc3545;
+  color: #fff;
+  transition: background-color 0.3s;
+}
+.edit-delete button:hover {
+  background-color: #c82333;
+}

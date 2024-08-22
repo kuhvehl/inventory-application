@@ -51,3 +51,18 @@ div.message,
 li {
   margin-bottom: 16px;
 }
+
+ul.menu {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  place-items: center;
+  padding-top: 15px;
+}
+
+@media (max-width: 768px) {
+  ul.menu {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+}
