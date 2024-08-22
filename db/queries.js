@@ -71,6 +71,22 @@ async function getItemById(id) {
   return null;
 }
 
+async function updateItem(
+  id,
+  name,
+  price,
+  description,
+  brand,
+  region,
+  categoryId,
+  subcategoryId
+) {
+  await pool.query(
+    "UPDATE items SET name = $1, price = $2, description = $3, brand = $4, region = $5, category_id = $6, subcategory_id = $7 WHERE id = $8",
+    [name, price, description, brand, region, categoryId, subcategoryId, id]
+  );
+}
+
 // Subcategories
 
 // Categories
@@ -139,14 +155,6 @@ async function createItem(name, price, description, subcategory_id) {
   return result.rows[0];
 }
 
-async function updateItem(id, name, price, description, subcategory_id) {
-  const result = await pool.query(
-    "UPDATE items SET name = $1, price = $2, description = $3, subcategory_id = $4 WHERE id = $5 RETURNING *",
-    [name, price, description, subcategory_id, id]
-  );
-  return result.rows[0];
-}
-
 async function deleteItem(id) {
   await pool.query("DELETE FROM items WHERE id = $1", [id]);
 }
@@ -158,4 +166,5 @@ module.exports = {
   getBrands,
   getRegions,
   getItemById,
+  updateItem,
 };

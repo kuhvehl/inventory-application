@@ -1,0 +1,84 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  padding: 1rem;
+  display: grid;
+  width: 100%;
+  justify-content: center;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+form {
+  display: grid;
+  width: 100%;
+  gap: 1rem;
+  justify-content: stretch;
+  align-content: start;
+  margin-top: 16px;
+}
+
+form > label {
+  width: 100%;
+}
+
+textarea,
+input,
+select {
+  width: 100%;
+}
+
+form > button {
+  width: 100%;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  transition: background-color 0.3s;
+  margin-top: 16px;
+  margin-bottom: 32px;
+}
+
+form > button:hover {
+  background-color: #0056b3;
+}
+
+li {
+  text-decoration: none;
+  list-style-type: none;
+}
+
+ul {
+  padding: 0px;
+}
+
+ul,
+div.message,
+li {
+  margin-bottom: 16px;
+}
+
+ul.menu {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  place-items: center;
+  padding-top: 15px;
+}
+
+@media (max-width: 768px) {
+  ul.menu {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+}
