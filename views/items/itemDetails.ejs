@@ -10,17 +10,11 @@
   <body>
     <header>
       <h1>Wine Inventory App</h1>
-      <nav>
-        <ul class="menu">
-          <li><a href="/categories">Manage Categories</a></li>
-          <li><a href="/subcategories">Manage Subcategories</a></li>
-          <li><a href="/items">Manage Items</a></li>
-        </ul>
-      </nav>
     </header>
     <main>
+      <h2>Item Details</h2>
       <section>
-        <h2><%= item.name %></h2>
+        <h3><%= item.name %></h3>
         <p>Price: $<%= item.price.toFixed(2) %></p>
         <p>Quantity: <%= item.quantity %></p>
         <p>Description: <%= item.description %></p>
@@ -36,7 +30,7 @@
             <button type="submit">Delete</button>
           </form>
         </div>
-        <a href="/">Back to Home</a>
+        <a href="/">Back to Items List</a>
       </section>
     </main>
     <script>

@@ -1,15 +1,5 @@
 const db = require("../db/queries");
 
-// async function renderHomePage(req, res) {
-//   try {
-//     const items = await db.getItems(); // Ensure you have this function in your db/queries.js
-//     res.render("index", { items });
-//   } catch (error) {
-//     console.error("Error fetching items:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// }
-
 async function renderHomePage(req, res) {
   try {
     const categories = await db.getCategories();

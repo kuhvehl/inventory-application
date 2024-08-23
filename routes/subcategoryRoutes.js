@@ -3,6 +3,34 @@ const router = express.Router();
 const subcategoryController = require("../controllers/subcategoryController");
 const db = require("../db/queries");
 
+// Route to get all subcategories
+// router.get("/", subcategoryController.listSubcategories);
+
+router.get("/", async (req, res) => {
+  const selectedCategory = req.query.category || "";
+
+  try {
+    // Use the function to get subcategories based on the selected category
+    const subcategories = await db.getSubcategories(
+      selectedCategory ? { category_id: selectedCategory } : {}
+    );
+
+    // Use the function to get all categories for the filter dropdown
+    const categories = await db.getCategories();
+
+    res.render("subcategories/manageSubcategories", {
+      categories,
+      subcategories,
+      selectedCategory,
+    });
+  } catch (error) {
+    console.error("Error fetching subcategories:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+module.exports = router;
+
 // Show form to create a new subcategory
 router.get("/create", async (req, res) => {
   const categories = await db.getCategories();
@@ -21,9 +49,6 @@ router.get("/update/:id", async (req, res) => {
 
 // Handle form submission to update an existing subcategory
 router.post("/update/:id", subcategoryController.updateSubcategory);
-
-// Route to get all subcategories
-router.get("/", subcategoryController.getAllSubcategories);
 
 // Route to create a new subcategory
 router.post("/", subcategoryController.createSubcategory);

@@ -1,0 +1,12 @@
+h2 {
+  text-align: center;
+}
+
+section {
+  display: grid;
+}
+
+a {
+  width: 100%;
+  text-align: center;
+}

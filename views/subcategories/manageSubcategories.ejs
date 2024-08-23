@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Subcategories - Wine Store</title>
+    <link rel="stylesheet" href="/reset.css" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/index.css" />
+    <link rel="stylesheet" href="/subcategories.css" />
+    <script src="/subcategoryFilters.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+    <header>
+        <h1>Manage Subcategories</h1>
+        <nav>
+            <ul class="menu">
+                <li></li><a href="/">Back to Items List</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="filter-container">
+        <select id="category-filter" name="category">
+            <option value="">All Categories</option>
+            <% categories.forEach(category => { %>
+                <option value="<%= category.id %>" <%= category.id == selectedCategory ? 'selected' : '' %>>
+                    <%= category.name %>
+                </option>
+            <% }) %>
+        </select>
+    </div>
+
+    <main>
+        <section>
+            <h2 class="inventory-heading">Subcategories:</h2>
+            <button onclick="location.href='/subcategories/add'">Add Subcategory</button>
+            <ul class="subcategories-list">
+                <% if (subcategories.length > 0) { %>
+                    <% subcategories.forEach(subcategory => { %>
+                        <li>
+                            <strong><%= subcategory.name %></strong><br />
+                            Category: <%= subcategory.category_name %><br />
+                            <a href="/subcategories/<%= subcategory.id %>">View Details</a> | 
+                            <a href="/subcategories/<%= subcategory.id %>/edit">Edit</a> | 
+                            <a href="/subcategories/<%= subcategory.id %>/delete" onclick="return confirm('Are you sure?')">Delete</a>
+                        </li>
+                    <% }) %>
+                <% } else { %>
+                    <p>No subcategories available.</p>
+                <% } %>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

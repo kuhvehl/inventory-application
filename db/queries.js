@@ -47,19 +47,38 @@ async function getCategories() {
   return result.rows;
 }
 
-async function getSubcategories() {
-  const result = await pool.query("SELECT * FROM subcategories");
+const getSubcategories = async (filter = {}) => {
+  const { category_id } = filter;
+
+  const query = `
+    SELECT subcategories.id, subcategories.name, categories.name AS category_name
+    FROM subcategories
+    INNER JOIN categories ON subcategories.category_id = categories.id
+    ${category_id ? `WHERE categories.id = $1` : ""}
+  `;
+
+  const values = category_id ? [category_id] : [];
+
+  const result = await pool.query(query, values);
   return result.rows;
-}
+};
 
 async function getBrands() {
-  const result = await pool.query("SELECT DISTINCT brand FROM items");
-  return result.rows.map((row) => row.brand);
+  const result = await pool.query(
+    "SELECT DISTINCT LOWER(brand) as brand FROM items WHERE brand IS NOT NULL ORDER BY brand"
+  );
+  return result.rows.map(
+    (row) => row.brand.charAt(0).toUpperCase() + row.brand.slice(1)
+  );
 }
 
 async function getRegions() {
-  const result = await pool.query("SELECT DISTINCT region FROM items");
-  return result.rows.map((row) => row.region);
+  const result = await pool.query(
+    "SELECT DISTINCT LOWER(region) as region FROM items WHERE region IS NOT NULL ORDER BY region"
+  );
+  return result.rows.map(
+    (row) => row.region.charAt(0).toUpperCase() + row.region.slice(1)
+  );
 }
 
 // Items
@@ -123,6 +142,13 @@ async function createItem({
 }
 
 // Subcategories
+async function getSubcategoriesByCategory(category_id) {
+  const result = await pool.query(
+    "SELECT * FROM subcategories WHERE category_id = $1",
+    [category_id]
+  );
+  return result.rows;
+}
 
 // Categories
 
