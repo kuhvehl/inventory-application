@@ -60,9 +60,73 @@ async function deleteItem(req, res) {
   }
 }
 
+// Display the form to create a new item
+async function createItemForm(req, res) {
+  try {
+    console.log("Creating item form"); // Test log
+    const categories = await db.getCategories(); // Fetch categories
+    const subcategories = await db.getSubcategories(); // Fetch subcategories
+    res.render("items/createItem", { categories, subcategories }); // Render the form with data
+  } catch (err) {
+    console.error("Error loading create item form:", err);
+    res.status(500).send("Internal Server Error: " + err.message);
+  }
+}
+
+// Handle the form submission for creating a new item
+async function createItem(req, res) {
+  try {
+    const {
+      name,
+      price,
+      quantity,
+      description,
+      brand,
+      region,
+      category_id,
+      subcategory_id,
+    } = req.body;
+
+    // Parse the form fields, ensuring that numeric values are correctly parsed
+    const parsedPrice = parseFloat(price); // Price should be parsed as a float
+    const parsedQuantity = parseInt(quantity, 10);
+    const parsedCategoryId = parseInt(category_id, 10);
+    const parsedSubcategoryId = parseInt(subcategory_id, 10);
+
+    // Validate that the price is not NaN
+    if (
+      isNaN(parsedPrice) ||
+      isNaN(parsedQuantity) ||
+      isNaN(parsedCategoryId) ||
+      isNaN(parsedSubcategoryId)
+    ) {
+      throw new Error("Invalid input for numeric fields.");
+    }
+
+    // Insert the item into the database
+    await db.createItem({
+      name,
+      price: parsedPrice,
+      quantity: parsedQuantity,
+      description,
+      brand,
+      region,
+      category_id: parsedCategoryId,
+      subcategory_id: parsedSubcategoryId,
+    });
+
+    res.redirect("/");
+  } catch (err) {
+    console.error("Error creating item:", err);
+    res.status(500).send("Internal Server Error");
+  }
+}
+
 module.exports = {
   viewItemDetails,
   editItemForm,
   updateItem,
   deleteItem,
+  createItemForm,
+  createItem,
 };

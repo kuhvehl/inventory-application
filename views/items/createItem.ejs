@@ -1,28 +1,68 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Create Item</title>
+    <title>Create New Item</title>
+    <link rel="stylesheet" href="/reset.css" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/editItem.css" />
+    <script type="application/json" id="categories-data">
+      <%- JSON.stringify(categories) %>
+    </script>
+    <script type="application/json" id="subcategories-data">
+      <%- JSON.stringify(subcategories) %>
+    </script>
+    <script src="/createItem.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-    <h1>Create Item</h1>
-    <form action="/items/create" method="POST">
-      <label for="name">Item Name:</label>
-      <input type="text" id="name" name="name" required />
+    <header>
+      <h1>Wine Inventory App</h1>
+      <nav>
+        <ul class="menu">
+          <li><a href="/categories">Manage Categories</a></li>
+          <li><a href="/subcategories">Manage Subcategories</a></li>
+          <li><a href="/items">Manage Items</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section>
+        <h2>Create New Item</h2>
+        <form action="/items/createItem" method="POST">
+          <label>Name: <input type="text" name="name" required /></label>
+          <label
+            >Price: <input type="number" step="0.01" name="price" required
+          /></label>
+          <label
+            >Quantity: <input type="number" name="quantity" required
+          /></label>
+          <label>Description: <textarea name="description"></textarea></label>
+          <label>Brand: <input type="text" name="brand" required /></label>
+          <label>Region: <input type="text" name="region" required /></label>
 
-      <label for="price">Price:</label>
-      <input type="number" id="price" name="price" step="0.01" required />
+          <!-- Category Dropdown -->
+          <label
+            >Category:
+            <select name="category_id" required>
+              <option value="">Select a category</option>
+              <% categories.forEach(category => { %>
+              <option value="<%= category.id %>"><%= category.name %></option>
+              <% }) %>
+            </select>
+          </label>
 
-      <label for="description">Description:</label>
-      <textarea id="description" name="description"></textarea>
+          <!-- Subcategory Dropdown -->
+          <label
+            >Subcategory:
+            <select name="subcategory_id" required>
+              <option value="">Select a subcategory</option>
+            </select>
+          </label>
 
-      <label for="subcategory_id">Subcategory:</label>
-      <select id="subcategory_id" name="subcategory_id" required>
-        <% subcategories.forEach(subcategory => { %>
-        <option value="<%= subcategory.id %>"><%= subcategory.name %></option>
-        <% }) %>
-      </select>
-
-      <button type="submit">Create</button>
-    </form>
+          <button type="submit">Create Item</button>
+        </form>
+        <a href="/items">Back to Item List</a>
+      </section>
+    </main>
   </body>
 </html>

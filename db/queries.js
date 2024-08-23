@@ -32,6 +32,9 @@ async function getItems(filters = {}) {
     paramIndex++;
   }
 
+  // Add sorting
+  query += ` ORDER BY name ASC`;
+
   const result = await pool.query(query, params);
   return result.rows.map((item) => ({
     ...item,
@@ -78,16 +81,45 @@ async function updateItem(
   description,
   brand,
   region,
-  subcategory_id
+  subcategory_id,
+  quantity
 ) {
   await pool.query(
-    "UPDATE items SET name = $1, price = $2, description = $3, brand = $4, region = $5, subcategory_id = $6 WHERE id = $7",
-    [name, price, description, brand, region, subcategory_id, id]
+    "UPDATE items SET name = $1, price = $2, description = $3, brand = $4, region = $5, subcategory_id = $6, quantity = $7 WHERE id = $8",
+    [name, price, description, brand, region, subcategory_id, quantity, id]
   );
 }
 
 async function deleteItem(id) {
   await pool.query("DELETE FROM items WHERE id = $1", [id]);
+}
+
+async function createItem({
+  name,
+  price,
+  description,
+  subcategory_id,
+  quantity,
+  brand,
+  region,
+}) {
+  console.log("Creating item with values:", {
+    name,
+    price,
+    description,
+    subcategory_id,
+    quantity,
+    brand,
+    region,
+  });
+
+  const result = await pool.query(
+    `INSERT INTO items (name, price, description, subcategory_id, quantity, brand, region) 
+     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+    [name, price, description, subcategory_id, quantity, brand, region]
+  );
+
+  return result.rows[0];
 }
 
 // Subcategories
@@ -148,16 +180,6 @@ async function deleteSubcategory(id) {
   await pool.query("DELETE FROM subcategories WHERE id = $1", [id]);
 }
 
-// Items
-
-async function createItem(name, price, description, subcategory_id) {
-  const result = await pool.query(
-    "INSERT INTO items (name, price, description, subcategory_id) VALUES ($1, $2, $3, $4) RETURNING *",
-    [name, price, description, subcategory_id]
-  );
-  return result.rows[0];
-}
-
 module.exports = {
   getItems,
   getCategories,
@@ -167,4 +189,5 @@ module.exports = {
   getItemById,
   updateItem,
   deleteItem,
+  createItem,
 };
