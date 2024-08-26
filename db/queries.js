@@ -114,11 +114,11 @@ async function deleteItem(id) {
 async function createItem({
   name,
   price,
-  description,
-  subcategory_id,
   quantity,
+  description,
   brand,
   region,
+  subcategory_id,
 }) {
   console.log("Creating item with values:", {
     name,
@@ -146,6 +146,17 @@ async function getSubcategoriesByCategory(category_id) {
     [category_id]
   );
   return result.rows;
+}
+
+async function getCategoryForSubcategory(subcategoryId) {
+  const result = await pool.query(
+    `SELECT c.*
+     FROM categories c
+     INNER JOIN subcategories s ON c.id = s.category_id
+     WHERE s.id = $1`,
+    [subcategoryId]
+  );
+  return result.rows[0]; // Assuming there's only one category per subcategory
 }
 
 // Categories
@@ -214,4 +225,7 @@ module.exports = {
   updateItem,
   deleteItem,
   createItem,
+  getSubcategoriesByCategory,
+  getCategoryForSubcategory,
+  getCategoryById,
 };

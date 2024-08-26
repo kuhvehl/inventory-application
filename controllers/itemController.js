@@ -3,7 +3,7 @@ const db = require("../db/queries");
 async function viewItemDetails(req, res) {
   try {
     const itemId = parseInt(req.params.id, 10);
-    const item = await db.getItemById(itemId); // Fetch item details by ID
+    const item = await db.getItemById(itemId);
     if (item) {
       res.render("items/itemDetails", { item });
     } else {
@@ -18,20 +18,53 @@ async function editItemForm(req, res) {
   try {
     const itemId = req.params.id;
     const item = await db.getItemById(itemId);
-    const categories = await db.getCategories();
-    const subcategories = await db.getSubcategories();
+    const itemCategory = await db.getCategoryForSubcategory(
+      item.subcategory_id
+    );
 
-    res.render("items/editItem", { item, categories, subcategories });
+    const selectedCategory =
+      (await db.getCategoryById(req.query.category)) || itemCategory;
+
+    const categories = await db.getCategories();
+    const subcategories = await db.getSubcategoriesByCategory(
+      selectedCategory.id
+    );
+
+    const formValues = {
+      name: req.query.name || item.name,
+      price: req.query.price || item.price,
+      quantity: req.query.quantity || item.quantity,
+      description: req.query.description || item.description,
+      brand: req.query.brand || item.brand,
+      region: req.query.region || item.region,
+    };
+
+    res.render("items/editItem", {
+      item,
+      itemCategory,
+      selectedCategory,
+      categories,
+      subcategories,
+      formValues,
+    });
   } catch (error) {
-    res.status(500).send(error.message);
+    console.error("Error fetching item or categories:", error);
+    res.status(500).send("Error loading edit item form");
   }
 }
 
 async function updateItem(req, res) {
   try {
     const itemId = parseInt(req.params.id, 10);
-    const { name, price, description, brand, region, subcategory_id } =
-      req.body;
+    const {
+      name,
+      price,
+      description,
+      brand,
+      region,
+      subcategory_id,
+      quantity,
+    } = req.body;
 
     await db.updateItem(
       itemId,
@@ -40,7 +73,8 @@ async function updateItem(req, res) {
       description,
       brand,
       region,
-      subcategory_id
+      subcategory_id,
+      quantity
     );
 
     res.redirect(`/items/${itemId}`);
@@ -60,20 +94,18 @@ async function deleteItem(req, res) {
   }
 }
 
-// Display the form to create a new item
 async function createItemForm(req, res) {
   try {
-    console.log("Creating item form"); // Test log
-    const categories = await db.getCategories(); // Fetch categories
-    const subcategories = await db.getSubcategories(); // Fetch subcategories
-    res.render("items/createItem", { categories, subcategories }); // Render the form with data
+    console.log("Creating item form");
+    const categories = await db.getCategories();
+    const subcategories = await db.getSubcategories();
+    res.render("items/createItem", { categories, subcategories });
   } catch (err) {
     console.error("Error loading create item form:", err);
     res.status(500).send("Internal Server Error: " + err.message);
   }
 }
 
-// Handle the form submission for creating a new item
 async function createItem(req, res) {
   try {
     const {
@@ -83,27 +115,21 @@ async function createItem(req, res) {
       description,
       brand,
       region,
-      category_id,
       subcategory_id,
     } = req.body;
 
-    // Parse the form fields, ensuring that numeric values are correctly parsed
-    const parsedPrice = parseFloat(price); // Price should be parsed as a float
+    const parsedPrice = parseFloat(price);
     const parsedQuantity = parseInt(quantity, 10);
-    const parsedCategoryId = parseInt(category_id, 10);
     const parsedSubcategoryId = parseInt(subcategory_id, 10);
 
-    // Validate that the price is not NaN
     if (
       isNaN(parsedPrice) ||
       isNaN(parsedQuantity) ||
-      isNaN(parsedCategoryId) ||
       isNaN(parsedSubcategoryId)
     ) {
       throw new Error("Invalid input for numeric fields.");
     }
 
-    // Insert the item into the database
     await db.createItem({
       name,
       price: parsedPrice,
@@ -111,7 +137,6 @@ async function createItem(req, res) {
       description,
       brand,
       region,
-      category_id: parsedCategoryId,
       subcategory_id: parsedSubcategoryId,
     });
 
