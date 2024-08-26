@@ -2,12 +2,9 @@
 <html>
 <head>
   <title>Edit Item</title>
-  <link rel="stylesheet" href="/reset.css" />
-  <link rel="stylesheet" href="/editItem.css" />
-  <script type="application/json" id="categories-data"><%- JSON.stringify(categories) %></script>
-  <script type="application/json" id="subcategories-data"><%- JSON.stringify(subcategories) %></script>
-  <script type="application/json" id="current-subcategory-data"><%= item.subcategory_id %></script>
-  <script src="/editItem.js" defer></script>
+  <link rel="stylesheet" href="/styles/reset.css" />
+  <link rel="stylesheet" href="/styles/editItem.css" />
+  <script src="/scripts/editItem.js" defer></script>
 
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -34,27 +31,33 @@
         <label>Brand: <input type="text" name="brand" value="<%= item.brand %>" required /></label>
         <label>Region: <input type="text" name="region" value="<%= item.region %>" required /></label>
 
-        <!-- Category Dropdown -->
-        <label>Category:
-          <select name="category_id" required>
-            <% categories.forEach(category => { %>
-              <option value="<%= category.id %>" <%= subcategories.find(sub => sub.id === item.subcategory_id)?.category_id === category.id ? 'selected' : '' %>>
-                <%= category.name %>
-              </option>
-            <% }) %>
-          </select>
-        </label>
+<!-- Category Dropdown -->
+<label>Category:
+  <select name="category_id" required>
+    <%
+    console.log(item.subcategory_id); 
+      const currentCategoryId = subcategories.find(sub => sub.id === item.subcategory_id).category_id; 
+    %>
+    <% categories.forEach(category => { %>
+      <option value="<%= category.id %>" <%= category.id === currentCategoryId ? 'selected' : '' %>>
+        <%= category.name %>
+      </option>
+    <% }) %>
+  </select>
+</label>
 
-        <!-- Subcategory Dropdown -->
-        <label>Subcategory:
-          <select name="subcategory_id" required>
-            <% subcategories.forEach(subcategory => { %>
-              <option value="<%= subcategory.id %>" <%= item.subcategory_id == subcategory.id ? 'selected' : '' %>>
-                <%= subcategory.name %>
-              </option>
-            <% }) %>
-          </select>
-        </label>
+<!-- Subcategory Dropdown -->
+<label>Subcategory:
+  <select name="subcategory_id" required>
+    <% subcategories
+      .filter(subcategory => subcategory.category_id === subcategories.find(sub => sub.id === item.subcategory_id).category_id)
+      .forEach(subcategory => { %>
+        <option value="<%= subcategory.id %>" <%= item.subcategory_id == subcategory.id ? 'selected' : '' %>>
+          <%= subcategory.name %>
+        </option>
+    <% }) %>
+  </select>
+</label>
 
         <button type="submit">Update Item</button>
       </form>
