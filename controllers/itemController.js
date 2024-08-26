@@ -96,13 +96,39 @@ async function deleteItem(req, res) {
 
 async function createItemForm(req, res) {
   try {
-    console.log("Creating item form");
-    const categories = await db.getCategories();
-    const subcategories = await db.getSubcategories();
-    res.render("items/createItem", { categories, subcategories });
-  } catch (err) {
-    console.error("Error loading create item form:", err);
-    res.status(500).send("Internal Server Error: " + err.message);
+    console.log(req.query.category);
+    let selectedCategoryIndex = req.query.category ? req.query.category : 1;
+    let selectedCategory = await db.getCategoryById(selectedCategoryIndex);
+    let selectedSubcategory = req.query.subcategory
+      ? req.params.subcategory
+      : 1;
+
+    console.log("Selected Category:", selectedCategory);
+    console.log("Selected Subcategory:", selectedSubcategory);
+    let categories = await db.getCategories();
+    const subcategories = await db.getSubcategoriesByCategory(
+      selectedCategory.id
+    );
+
+    const formValues = {
+      name: req.query.name || "",
+      price: req.query.price || "",
+      quantity: req.query.quantity || "",
+      description: req.query.description || "",
+      brand: req.query.brand || "",
+      region: req.query.region || "",
+    };
+
+    res.render("items/createItem", {
+      selectedCategory,
+      selectedSubcategory,
+      categories,
+      subcategories,
+      formValues,
+    });
+  } catch (error) {
+    console.error("Error fetching item or categories:", error);
+    res.status(500).send("Error loading edit item form");
   }
 }
 
