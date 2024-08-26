@@ -6,7 +6,6 @@ async function getItems(filters = {}) {
   const params = [];
   let paramIndex = 1;
 
-  // Apply filters to the query if they exist
   if (filters.category && filters.category !== "all") {
     query += ` WHERE subcategory_id IN (SELECT id FROM subcategories WHERE category_id = $${paramIndex})`;
     params.push(filters.category);
@@ -21,18 +20,21 @@ async function getItems(filters = {}) {
   }
 
   if (filters.brand && filters.brand !== "all") {
-    query += (params.length ? " AND" : " WHERE") + ` brand = $${paramIndex}`;
+    query +=
+      (params.length ? " AND" : " WHERE") +
+      ` UPPER(brand) = UPPER($${paramIndex})`;
     params.push(filters.brand);
     paramIndex++;
   }
 
   if (filters.region && filters.region !== "all") {
-    query += (params.length ? " AND" : " WHERE") + ` region = $${paramIndex}`;
+    query +=
+      (params.length ? " AND" : " WHERE") +
+      ` UPPER(region) = UPPER($${paramIndex})`;
     params.push(filters.region);
     paramIndex++;
   }
 
-  // Add sorting
   query += ` ORDER BY name ASC`;
 
   const result = await pool.query(query, params);
@@ -65,20 +67,16 @@ const getSubcategories = async (filter = {}) => {
 
 async function getBrands() {
   const result = await pool.query(
-    "SELECT DISTINCT LOWER(brand) as brand FROM items WHERE brand IS NOT NULL ORDER BY brand"
+    "SELECT DISTINCT UPPER(brand) as brand FROM items WHERE brand IS NOT NULL ORDER BY brand"
   );
-  return result.rows.map(
-    (row) => row.brand.charAt(0).toUpperCase() + row.brand.slice(1)
-  );
+  return result.rows.map((row) => row.brand);
 }
 
 async function getRegions() {
   const result = await pool.query(
-    "SELECT DISTINCT LOWER(region) as region FROM items WHERE region IS NOT NULL ORDER BY region"
+    "SELECT DISTINCT UPPER(region) as region FROM items WHERE region IS NOT NULL ORDER BY region"
   );
-  return result.rows.map(
-    (row) => row.region.charAt(0).toUpperCase() + row.region.slice(1)
-  );
+  return result.rows.map((row) => row.region);
 }
 
 // Items

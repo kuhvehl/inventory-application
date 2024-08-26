@@ -2,10 +2,10 @@
 <html>
   <head>
     <title>Wine Store</title>
-    <link rel="stylesheet" href="/reset.css" />
-    <link rel="stylesheet" href="/styles.css" />
-    <link rel="stylesheet" href="/index.css" />
-    <script src="/filters.js" defer></script>
+    <link rel="stylesheet" href="styles/reset.css" />
+    <link rel="stylesheet" href="styles/styles.css" />
+    <link rel="stylesheet" href="styles/index.css" />
+    <script src="scripts/filters.js" defer></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
@@ -31,7 +31,13 @@
       
       <select id="subcategory-filter" name="subcategory">
         <option value="">All Subcategories</option>
-        <% subcategories.forEach(subcategory => { %>
+        <% let filteredSubcategories = subcategories;
+        if (selectedCategory) {
+          const selectedCategoryName = categories.find(category => category.id == selectedCategory).name;
+          filteredSubcategories = subcategories.filter(subcategory => subcategory.category_name === selectedCategoryName);
+        }
+        %>
+        <% filteredSubcategories.forEach(subcategory => { %>
           <option value="<%= subcategory.id %>" <%= subcategory.id == selectedSubcategory ? 'selected' : '' %>>
             <%= subcategory.name %>
           </option>
