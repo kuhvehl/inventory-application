@@ -253,4 +253,5 @@ module.exports = {
   deleteSubcategory,
   updateSubcategory,
   createCategory,
+  deleteCategory,
 };

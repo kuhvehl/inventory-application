@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= category.name %> Details - Wine Store</title>
+    <link rel="stylesheet" href="/styles/reset.css" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="/styles/categories.css" />
+    <link rel="stylesheet" href="/styles/editItem.css" />
+  </head>
+  <body>
+    <header>
+      <h1><%= category.name %> Details</h1>
+      <nav>
+        <ul class="menu">
+          <a href="/categories">Back to Manage Categories</a>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section>
+        <h2>Subcategories under <%= category.name %>:</h2>
+        <% if (subcategories.length > 0) { %>
+        <ul class="subcategories-list">
+          <% subcategories.forEach(subcategory => { %>
+          <li>
+            <strong><%= subcategory.name %></strong><br />
+            <a href="/subcategories/<%= subcategory.id %>">Edit Subcategory</a>
+          </li>
+          <% }) %>
+        </ul>
+        <% } else { %>
+        <p>No subcategories available.</p>
+        <% } %>
+      </section>
+
+      <section>
+        <% if (subcategories.length === 0) { %>
+        <form
+          action="/categories/<%= category.id %>?_method=DELETE"
+          method="POST"
+        >
+          <input type="hidden" name="_method" value="DELETE" />
+          <button
+            type="submit"
+            onclick="return confirm('Are you sure you want to delete this category?');"
+          >
+            Delete Category
+          </button>
+        </form>
+        <% } else { %>
+        <p>
+          To delete this category, first delete or reassign all subcategories
+          within it.
+        </p>
+        <% } %>
+      </section>
+    </main>
+  </body>
+</html>

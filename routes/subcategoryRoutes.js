@@ -8,6 +8,8 @@ router.get("/add", subcategoryController.showAddSubcategoryForm);
 
 router.post("/add", subcategoryController.createSubcategory);
 
+router.get("/:id", subcategoryController.viewSubcategoryDetails);
+
 router.delete("/:id", subcategoryController.deleteSubcategory);
 
 router.get("/:id/edit", subcategoryController.renderEditForm);

@@ -28,29 +28,22 @@ async function updateCategory(req, res) {
   res.redirect("/categories");
 }
 
-async function viewCategoryItems(req, res) {
-  const { id } = req.params;
-  try {
-    const subcategories = await db.getSubcategoriesByCategoryId(id);
-    const items = await db.getItemsBySubcategoryIds(
-      subcategories.map((sub) => sub.id)
-    );
-    res.render("items/viewItem", {
-      items,
-      subcategoryName: "Subcategory Name",
-    });
-  } catch (error) {
-    res.status(500).send("Internal Server Error");
-  }
+async function viewCategoryDetails(req, res) {
+  const categoryId = req.params.id;
+  const category = await db.getCategoryById(categoryId);
+  const subcategories = await db.getSubcategoriesByCategory(categoryId);
+  res.render("categories/viewCategoryDetails", { category, subcategories });
 }
 
 async function deleteCategory(req, res) {
-  const { id } = req.params;
-  try {
-    await db.deleteCategory(id);
-    res.send("Category Deleted");
-  } catch (error) {
-    res.status(500).send("Internal Server Error");
+  const categoryId = req.params.id;
+  const subcategories = await db.getSubcategoriesByCategory(categoryId);
+
+  if (subcategories.length === 0) {
+    await db.deleteCategory(categoryId);
+    res.redirect("/categories");
+  } else {
+    res.redirect(`/categories/${categoryId}`);
   }
 }
 
@@ -59,7 +52,7 @@ module.exports = {
   editCategoryForm,
   updateCategory,
   deleteCategory,
-  viewCategoryItems,
+  viewCategoryDetails,
   addCategoryForm,
   addCategory,
 };
