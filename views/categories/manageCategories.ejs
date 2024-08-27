@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Manage Categories - Wine Store</title>
+    <link rel="stylesheet" href="/styles/reset.css" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="/styles/index.css" />
+    <link rel="stylesheet" href="/styles/categories.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <header>
+      <h1>Manage Categories</h1>
+      <br />
+      <nav>
+        <a href="/">Back to Items List</a>
+      </nav>
+      <br />
+    </header>
+
+    <main>
+      <section>
+        <h2 class="inventory-heading">Categories:</h2>
+        <button onclick="location.href='/categories/add'">Add Category</button>
+        <ul class="categories-list">
+          <% if (categories.length > 0) { %> <% categories.forEach(category => {
+          %>
+          <li>
+            <strong><%= category.name %></strong><br />
+            <a href="/categories/<%= category.id %>">View Details</a> |
+            <a href="/categories/<%= category.id %>/edit">Edit</a>
+          </li>
+          <% }) %> <% } else { %>
+          <p>No categories available.</p>
+          <% } %>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>

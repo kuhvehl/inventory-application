@@ -246,9 +246,11 @@ module.exports = {
   getSubcategoriesByCategory,
   getCategoryForSubcategory,
   getCategoryById,
+  updateCategory,
   createSubcategory,
   getSubcategoryById,
   getItemsBySubcategoryId,
   deleteSubcategory,
   updateSubcategory,
+  createCategory,
 };

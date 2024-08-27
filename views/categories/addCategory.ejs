@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Category - Wine Store</title>
+    <link rel="stylesheet" href="/styles/reset.css" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="/styles/editItem.css" />
+    <link rel="stylesheet" href="/styles/createItem.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Add New Category</h1>
+      <nav>
+        <ul class="menu">
+          <a href="/categories">Back to Manage Categories</a>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <form action="/categories/add" method="POST">
+        <div class="form-group">
+          <label for="name">Category Name:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+
+        <button type="submit">Add Category</button>
+      </form>
+    </main>
+  </body>
+</html>

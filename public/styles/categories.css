@@ -1,0 +1,13 @@
+/* styles/categories.css */
+.categories-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.categories-list li {
+  margin-bottom: 10px;
+}
+
+button {
+  margin-bottom: 20px;
+}
