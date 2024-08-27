@@ -1,18 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Subcategories</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= subcategory.name %> Details - Wine Store</title>
+    <link rel="stylesheet" href="/styles/reset.css" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="/styles/subcategories.css" />
+    <link rel="stylesheet" href="/styles/editItem.css" />
   </head>
   <body>
-    <h1>Subcategories under <%= categoryName %></h1>
-    <ul>
-      <% subcategories.forEach(subcategory => { %>
-      <li>
-        <a href="/subcategories/<%= subcategory.id %>"
-          ><%= subcategory.name %></a
-        >
-      </li>
-      <% }) %>
-    </ul>
+    <header>
+      <h1><%= subcategory.name %> Details</h1>
+      <nav>
+        <ul class="menu">
+          <a href="/subcategories">Back to Manage Subcategories</a>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section>
+        <h2>Items in <%= subcategory.name %>:</h2>
+        <% if (items.length > 0) { %>
+        <ul class="items-list">
+          <% items.forEach(item => { %>
+          <br />
+          <li>
+            <strong><%= item.name %></strong><br />
+            Price: <%= item.price %>
+            <form
+              action="/items/<%= item.id %>?_method=DELETE&redirectTo=subcategory&subcategoryId=<%= subcategory.id %>"
+              method="POST"
+              style="display: inline"
+            >
+              <button type="submit">Delete</button>
+            </form>
+          </li>
+          <% }) %>
+        </ul>
+        <% } else { %>
+        <p>No items in this subcategory.</p>
+        <% } %>
+      </section>
+
+      <% if (items.length === 0) { %>
+      <form
+        action="/subcategories/<%= subcategory.id %>?_method=DELETE"
+        method="POST"
+      >
+        <input type="hidden" name="_method" value="DELETE" />
+        <button type="submit">Delete Subcategory</button>
+      </form>
+      <% } else { %>
+      <p>
+        To delete this subcategory, first delete or reassign all items within
+        it.
+      </p>
+      <% } %>
+    </main>
+    <script>
+      document
+        .querySelector('form[action*="_method=DELETE"]')
+        .addEventListener("submit", function (event) {
+          if (!confirm("Are you sure you want to delete this item?")) {
+            event.preventDefault();
+          }
+        });
+    </script>
   </body>
 </html>

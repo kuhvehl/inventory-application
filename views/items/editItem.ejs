@@ -12,9 +12,7 @@
     <h1>Wine Inventory App</h1>
     <nav>
       <ul class="menu">
-        <li><a href="/categories">Manage Categories</a></li>
-        <li><a href="/subcategories">Manage Subcategories</a></li>
-        <li><a href="/items">Manage Items</a></li>
+        <a href="/items/<%= item.id %>">Back to Item Details</a>
       </ul>
     </nav>
   </header>
@@ -51,7 +49,6 @@
 
         <button type="submit">Update Item</button>
       </form>
-      <a href="/items/<%= item.id %>">Back to Item Details</a>
     </section>
   </main>
 </body>

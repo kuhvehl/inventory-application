@@ -86,8 +86,17 @@ async function updateItem(req, res) {
 async function deleteItem(req, res) {
   try {
     const { id } = req.params;
+    const { redirectTo, subcategoryId } = req.query;
+
     await db.deleteItem(id);
-    res.redirect("/");
+
+    // Check if redirectTo is set to 'subcategory'
+    if (redirectTo === "subcategory" && subcategoryId) {
+      res.redirect(`/subcategories/${subcategoryId}`);
+    } else {
+      // Default redirect if no specific redirection is provided
+      res.redirect("/");
+    }
   } catch (err) {
     console.error("Error deleting item:", err);
     res.status(500).send("Server Error");
@@ -96,15 +105,12 @@ async function deleteItem(req, res) {
 
 async function createItemForm(req, res) {
   try {
-    console.log(req.query.category);
     let selectedCategoryIndex = req.query.category ? req.query.category : 1;
     let selectedCategory = await db.getCategoryById(selectedCategoryIndex);
     let selectedSubcategory = req.query.subcategory
       ? req.params.subcategory
       : 1;
 
-    console.log("Selected Category:", selectedCategory);
-    console.log("Selected Subcategory:", selectedSubcategory);
     let categories = await db.getCategories();
     const subcategories = await db.getSubcategoriesByCategory(
       selectedCategory.id

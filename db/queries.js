@@ -148,6 +148,23 @@ async function getSubcategoriesByCategory(category_id) {
   return result.rows;
 }
 
+async function getItemsBySubcategoryId(subcategoryId) {
+  const query = `
+    SELECT * FROM items
+    WHERE subcategory_id = $1
+    ORDER BY name ASC
+  `;
+  const params = [subcategoryId];
+
+  try {
+    const result = await pool.query(query, params);
+    return result;
+  } catch (error) {
+    console.error("Error fetching items by subcategory ID:", error);
+    throw error;
+  }
+}
+
 async function getCategoryForSubcategory(subcategoryId) {
   const result = await pool.query(
     `SELECT c.*
@@ -212,7 +229,8 @@ async function updateSubcategory(id, name, category_id) {
 }
 
 async function deleteSubcategory(id) {
-  await pool.query("DELETE FROM subcategories WHERE id = $1", [id]);
+  const query = "DELETE FROM subcategories WHERE id = $1";
+  await pool.query(query, [id]);
 }
 
 module.exports = {
@@ -228,4 +246,8 @@ module.exports = {
   getSubcategoriesByCategory,
   getCategoryForSubcategory,
   getCategoryById,
+  createSubcategory,
+  getSubcategoryById,
+  getItemsBySubcategoryId,
+  deleteSubcategory,
 };

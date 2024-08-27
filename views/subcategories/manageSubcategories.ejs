@@ -2,11 +2,11 @@
 <html>
 <head>
     <title>Manage Subcategories - Wine Store</title>
-    <link rel="stylesheet" href="/reset.css" />
-    <link rel="stylesheet" href="/styles.css" />
-    <link rel="stylesheet" href="/index.css" />
-    <link rel="stylesheet" href="/subcategories.css" />
-    <script src="/subcategoryFilters.js" defer></script>
+    <link rel="stylesheet" href="/styles/reset.css" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="/styles//index.css" />
+    <link rel="stylesheet" href="/styles/subcategories.css" />
+    <script src="/scripts/subcategoryFilters.js" defer></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
@@ -40,9 +40,7 @@
                         <li>
                             <strong><%= subcategory.name %></strong><br />
                             Category: <%= subcategory.category_name %><br />
-                            <a href="/subcategories/<%= subcategory.id %>">View Details</a> | 
-                            <a href="/subcategories/<%= subcategory.id %>/edit">Edit</a> | 
-                            <a href="/subcategories/<%= subcategory.id %>/delete" onclick="return confirm('Are you sure?')">Delete</a>
+                            <a href="/subcategories/<%= subcategory.id %>">View Details</a>
                         </li>
                     <% }) %>
                 <% } else { %>

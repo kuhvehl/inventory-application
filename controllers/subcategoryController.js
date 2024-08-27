@@ -4,12 +4,16 @@ const db = require("../db/queries");
 async function renderSubcategories(req, res) {
   try {
     const categories = await db.getCategories();
-    const subcategories = await db.getSubcategories();
+    let subcategories = await db.getSubcategories();
 
     const selectedCategory = req.query.category || "";
     const selectedSubcategory = req.query.subcategory || "";
 
-    res.render("/subcategories/manageSubcategories", {
+    if (selectedCategory) {
+      subcategories = await db.getSubcategoriesByCategory(selectedCategory);
+    }
+
+    res.render("subcategories/manageSubcategories", {
       categories,
       subcategories,
       selectedCategory,
@@ -24,7 +28,7 @@ async function createSubcategory(req, res) {
   const { name, category_id } = req.body;
   try {
     await db.createSubcategory(name, category_id);
-    res.redirect(`/categories/${category_id}`);
+    res.redirect(`/subcategories`);
   } catch (error) {
     res.status(500).send("Error creating subcategory");
   }
@@ -41,47 +45,55 @@ async function updateSubcategory(req, res) {
   }
 }
 
-async function viewSubcategories(req, res) {
-  const { id } = req.params; // Category ID
+async function viewSubcategoryDetails(req, res) {
+  const subcategoryId = req.params.id;
+
   try {
-    const category = await db.getCategoryById(id);
-    const subcategories = await db.getSubcategoriesByCategoryId(id);
-    res.render("subcategories/viewSubcategory", {
-      subcategories,
-      categoryName: category.name,
-    });
+    // Fetch the subcategory details
+    const subcategory = await db.getSubcategoryById(subcategoryId);
+
+    // Fetch all items in the subcategory
+    const itemsResult = await db.getItemsBySubcategoryId(subcategoryId);
+    const items = itemsResult.rows;
+
+    res.render("subcategories/viewSubcategory", { subcategory, items });
   } catch (error) {
-    res.status(500).send("Internal Server Error");
+    console.error("Error fetching subcategory details:", error);
+    res.status(500).send("Error loading subcategory details");
   }
 }
 
-async function createSubcategory(req, res) {
-  const { name, category_id } = req.body;
+async function showAddSubcategoryForm(req, res) {
   try {
-    await db.createSubcategory(name, category_id);
-    res.status(201).send("Subcategory Created");
+    const categories = await db.getCategories(); // Assuming you have a method to fetch categories
+    res.render("subcategories/addSubcategory", { categories });
   } catch (error) {
-    res.status(500).send("Internal Server Error");
-  }
-}
-
-async function updateSubcategory(req, res) {
-  const { id } = req.params;
-  const { name } = req.body;
-  try {
-    await db.updateSubcategory(id, name);
-    res.send("Subcategory Updated");
-  } catch (error) {
-    res.status(500).send("Internal Server Error");
+    console.error("Error fetching categories:", error);
+    res.status(500).send("Error loading add subcategory form");
   }
 }
 
 async function deleteSubcategory(req, res) {
   const { id } = req.params;
+  console.log("fart");
+
   try {
+    // Check if subcategory has any items associated
+    const items = await db.getItemsBySubcategoryId(id);
+    console.log(items);
+    if (items.length > 0) {
+      return res
+        .status(400)
+        .send(
+          "Cannot delete subcategory with items. Please delete items first."
+        );
+    }
+
+    // Proceed to delete the subcategory
     await db.deleteSubcategory(id);
-    res.send("Subcategory Deleted");
+    res.redirect("/subcategories"); // Redirect back to the subcategories list
   } catch (error) {
+    console.error("Error deleting subcategory:", error);
     res.status(500).send("Internal Server Error");
   }
 }
@@ -99,11 +111,10 @@ async function viewSubcategoryItems(req, res) {
 
 module.exports = {
   renderSubcategories,
-  createSubcategory,
   updateSubcategory,
   deleteSubcategory,
-  viewSubcategories,
+  viewSubcategoryDetails,
   viewSubcategoryItems,
+  showAddSubcategoryForm,
   createSubcategory,
-  updateSubcategory,
 };
