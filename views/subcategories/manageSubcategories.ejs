@@ -12,11 +12,11 @@
 <body>
     <header>
         <h1>Manage Subcategories</h1>
+    </br>
         <nav>
-            <ul class="menu">
-                <li></li><a href="/">Back to Items List</a></li>
-            </ul>
+            <a href="/">Back to Items List</a>
         </nav>
+    </br>
     </header>
 
     <div class="filter-container">
@@ -40,7 +40,8 @@
                         <li>
                             <strong><%= subcategory.name %></strong><br />
                             Category: <%= subcategory.category_name %><br />
-                            <a href="/subcategories/<%= subcategory.id %>">View Details</a>
+                            <a href="/subcategories/<%= subcategory.id %>">View Details</a> |
+                            <a href="/subcategories/<%= subcategory.id %>/edit">Edit</a>
                         </li>
                     <% }) %>
                 <% } else { %>

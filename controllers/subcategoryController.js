@@ -1,3 +1,4 @@
+const { render } = require("ejs");
 const db = require("../db/queries");
 
 // Display all subcategories
@@ -24,24 +25,27 @@ async function renderSubcategories(req, res) {
   }
 }
 
-async function createSubcategory(req, res) {
-  const { name, category_id } = req.body;
+async function renderEditForm(req, res) {
   try {
-    await db.createSubcategory(name, category_id);
-    res.redirect(`/subcategories`);
-  } catch (error) {
-    res.status(500).send("Error creating subcategory");
+    const { id } = req.params;
+    const subcategory = await db.getSubcategoryById(id); // Assuming this fetches the subcategory by ID
+    const categories = await db.getCategories(); // Fetch all categories for the dropdown
+    res.render("subcategories/editSubcategory", { subcategory, categories });
+  } catch (err) {
+    console.error("Error fetching subcategory:", err);
+    res.status(500).send("Server Error");
   }
 }
 
 async function updateSubcategory(req, res) {
-  const { id } = req.params;
-  const { name, category_id } = req.body;
   try {
-    await db.updateSubcategory(id, name, category_id);
-    res.redirect(`/categories/${category_id}`);
-  } catch (error) {
-    res.status(500).send("Error updating subcategory");
+    const { id } = req.params;
+    const { name, category_id } = req.body;
+    await db.updateSubcategory(id, name, category_id); // Assuming this updates the subcategory in the DB
+    res.redirect("/subcategories");
+  } catch (err) {
+    console.error("Error updating subcategory:", err);
+    res.status(500).send("Server Error");
   }
 }
 
@@ -70,6 +74,16 @@ async function showAddSubcategoryForm(req, res) {
   } catch (error) {
     console.error("Error fetching categories:", error);
     res.status(500).send("Error loading add subcategory form");
+  }
+}
+
+async function createSubcategory(req, res) {
+  const { name, category_id } = req.body;
+  try {
+    await db.createSubcategory(name, category_id);
+    res.redirect(`/subcategories`);
+  } catch (error) {
+    res.status(500).send("Error creating subcategory");
   }
 }
 
@@ -117,4 +131,5 @@ module.exports = {
   viewSubcategoryItems,
   showAddSubcategoryForm,
   createSubcategory,
+  renderEditForm,
 };

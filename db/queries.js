@@ -250,4 +250,5 @@ module.exports = {
   getSubcategoryById,
   getItemsBySubcategoryId,
   deleteSubcategory,
+  updateSubcategory,
 };
